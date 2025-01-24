@@ -73,7 +73,7 @@ app.post('/petshops', (request: Request, response: Response) => {
 
   const existingPetshop = petshops.find((shop) => shop.cnpj === cnpj);
   if (existingPetshop) {
-    response.status(400).json({ error: 'Petshop already exists' });
+    response.status(400).json({ error: 'Petshop existente' });
     return;
   }
   else {
@@ -85,7 +85,7 @@ app.post('/petshops', (request: Request, response: Response) => {
     };
 
     petshops.push(petshop);
-    response.status(201).json({ message: 'Petshop created successfully', petshop });
+    response.status(201).json({ message: 'Petshop criado com sucesso', petshop });
   }
 });
 
@@ -98,7 +98,7 @@ app.get('/petshops/:id', (request: Request, response: Response) => {
   const petshop = petshops.find((shop) => shop.id === id);
 
   if (!petshop) {
-    response.status(404).json({ error: 'Petshop not found' });
+    response.status(404).json({ error: 'Erro: Petshop não encontrado' });
     return;
   }
   response.status(200).json(petshop);
@@ -110,12 +110,12 @@ app.patch('/petshops/:id', (request: Request, response: Response) => {
 
   const petshopIndex = petshops.findIndex((shop) => shop.id === id);
   if (petshopIndex === -1) {
-    response.status(404).json({ error: 'Petshop not found' });
+    response.status(404).json({ error: 'Erro: Petshop não encontrado' });
     return;
   }
 
   if (typeof updateData !== 'object' || updateData === null) {
-    response.status(400).json({ error: 'Invalid update data' });
+    response.status(400).json({ error: 'data de atualizacao invalida' });
     return;
   }
 
@@ -131,12 +131,12 @@ app.delete('/petshops/:id', (request: Request, response: Response) => {
   const petshopIndex = petshops.findIndex((shop) => shop.id === id);
 
   if (petshopIndex === -1) {
-    response.status(404).json({ error: 'Petshop not found' });
+    response.status(404).json({ error: 'Erro: Petshop não encontrado' });
     return;
   }
 
   petshops.splice(petshopIndex, 1);
-  response.status(200).json({ message: 'Petshop deleted successfully' });
+  response.status(200).json({ message: 'Petshop deletado' });
 });
 
 app.post('/pets', checkExistsPetshop, (request: RequestWithPetshop, response: Response) => {
@@ -150,7 +150,7 @@ app.post('/pets', checkExistsPetshop, (request: RequestWithPetshop, response: Re
 
   const deadlineDate = new Date(deadline_vaccination);
   if (isNaN(deadlineDate.getTime())) {
-    response.status(400).json({ error: 'Invalid deadline_vaccination date' });
+    response.status(400).json({ error: 'Data de vencimento de vacinação invalido' });
     return;
   }
 
@@ -188,12 +188,12 @@ app.put('/pets/:id', checkExistsPetshop, (request: RequestWithPetshop, response:
       pet.type = type;
       pet.description = description;
       pet.deadline_vaccination = deadline_vaccination;
-      response.status(200).json({ message: 'Pet updated successfully', pet });
+      response.status(200).json({ message: 'Pet atualizado', pet });
     } else {
-      response.status(404).json({ error: 'Pet not found' });
+      response.status(404).json({ error: 'Erro: Pet não encontrado' });
     }
   } else {
-    response.status(400).json({ message: 'Error: Petshop not found' });
+    response.status(400).json({ message: 'Erro: Petshop não encontrado' });
   }
 });
 
@@ -203,13 +203,13 @@ app.patch('/pets/:petId', checkExistsPetshop, (request: RequestWithPetshop, resp
   const petshop = request.petshop;
 
   if (!petshop) {
-    response.status(400).json({ message: 'Error: Petshop not found' });
+    response.status(400).json({ message: 'Erro: Petshop não encontrado' });
     return;
   }
 
   const petIndex = petshop.pets.findIndex((pet) => pet.id === petId);
   if (petIndex === -1) {
-    response.status(404).json({ error: 'Pet not found' });
+    response.status(404).json({ error: 'Erro: Pet não encontrado' });
     return;
   }
 
@@ -221,7 +221,7 @@ app.patch('/pets/:petId', checkExistsPetshop, (request: RequestWithPetshop, resp
   const updatedPet = { ...petshop.pets[petIndex] };
   petshop.pets[petIndex] = partialUpdate(updatedPet, updateData);
 
-  response.status(200).json({ message: 'Pet updated successfully', pet: petshop.pets[petIndex] });
+  response.status(200).json({ message: 'Pet atualizado', pet: petshop.pets[petIndex] });
 });
 
 app.patch('/pets/:id/vaccinated', checkExistsPetshop, (request: RequestWithPetshop, response: Response) => {
@@ -232,12 +232,12 @@ app.patch('/pets/:id/vaccinated', checkExistsPetshop, (request: RequestWithPetsh
     const pet = petshop.pets.find((p: Pet) => p.id === id);
     if (pet) {
       pet.vaccinated = true;
-      response.status(200).json({ message: 'Pet marked as vaccinated', pet });
+      response.status(200).json({ message: 'o pet esta vacinado', pet });
     } else {
-      response.status(404).json({ error: 'Pet not found' });
+      response.status(404).json({ error: 'Pet nao encontrado' });
     }
   } else {
-    response.status(400).json({ message: 'Error: Petshop not found' });
+    response.status(400).json({ message: 'Erro: Petshop não encontrado' });
   }
 });
 
@@ -260,7 +260,7 @@ app.delete('/pets/:id', checkExistsPetshop, (request: RequestWithPetshop, respon
       response.status(404).json({ message: 'Pet não encontrado' });
     }
   } else {
-    response.status(400).json({ message: 'Error: Petshop não encontrado' });
+    response.status(400).json({ message: 'Erro: Petshop não encontrado' });
   }
 });
 
